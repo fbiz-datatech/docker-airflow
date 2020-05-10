@@ -11,9 +11,9 @@ services:
             - POSTGRES_PASSWORD=datatech_airflow
             - POSTGRES_DB=datatech_airflow
         # Uncomment these lines to persist data on the local filesystem.
-        #     - PGDATA=/var/lib/postgresql/data/pgdata
-        # volumes:
-        #     - ./pgdata:/var/lib/postgresql/data/pgdata
+            - PGDATA=/var/lib/postgresql/data/pgdata
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data/pgdata
 
     webserver:
         image: puckel/docker-airflow:1.10.9
@@ -29,6 +29,8 @@ services:
             # - POSTGRES_PASSWORD=datatech_airflow
             # - POSTGRES_DB=datatech_airflow
             # - REDIS_PASSWORD=redispass
+            - AIRFLOW__WEBSERVER__AUTHENTICATE=True
+            - AIRFLOW__WEBSERVER__AUTH_BACKEND=airflow.contrib.auth.backends.password_auth
         volumes:
             - ./dags:/usr/local/airflow/dags
             # Uncomment to include custom plugins
@@ -71,6 +73,8 @@ services:
             # - POSTGRES_PASSWORD=datatech_airflow
             # - POSTGRES_DB=datatech_airflow
             # - REDIS_PASSWORD=redispass
+            - AIRFLOW__WEBSERVER__AUTHENTICATE=True
+            - AIRFLOW__WEBSERVER__AUTH_BACKEND=airflow.contrib.auth.backends.password_auth
         command: scheduler
 
     worker:
@@ -89,4 +93,6 @@ services:
             # - POSTGRES_PASSWORD=datatech_airflow
             # - POSTGRES_DB=datatech_airflow
             # - REDIS_PASSWORD=redispass
+            - AIRFLOW__WEBSERVER__AUTHENTICATE=True
+            - AIRFLOW__WEBSERVER__AUTH_BACKEND=airflow.contrib.auth.backends.password_auth
         command: worker
